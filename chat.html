@@ -46,7 +46,7 @@
             border-radius: 40px;
             padding: 34px;
             margin-bottom: 42px;
-            height: 30rem; ;
+            height: 28rem;
             overflow-y: scroll;
         }
         .form-control{
@@ -142,9 +142,15 @@
         <div class="container">
             <div class="row">
                 <div class="header d-flex justify-content-between align-items-center py-4 mb-4">
-                    <h1 class="room-name">
-                        Room Name: <span id="room_name"></span>
-                    </h1>
+                    <div>
+                        <h1 class="room-name">
+                            Room Name: <span id="room_name"></span>
+                        </h1>
+                        <h2 class="room-name">
+                            Product Name: <span id="product_name"></span>
+                        </h2>
+                    </div>
+                   
                     <button type="submit" class="btn btn-primary btn-end" id="endChat">End Chat </button>
                 </div>
             </div>  
@@ -199,7 +205,14 @@
 function get_room(){
     console.log("calling get room api");
     const room = localStorage.getItem('room');
-    console.log(room);
+    const room_name = document.getElementById('room_name');
+    room_name.innerHTML = room;
+
+    const product = localStorage.getItem('product');
+    const product_name = document.getElementById('product_name');
+    product_name.innerHTML = product;
+
+    //console.log(room);
     $.ajax({
         url: 'https://100069.pythonanywhere.com/chat/get-room/',
         //url :'http://127.0.0.1:8000/chat/get-room/',
@@ -210,8 +223,6 @@ function get_room(){
         success: function (data) {
             console.log("get room api called");
             console.log(data);
-            const room_name = document.getElementById('room_name');
-            room_name.innerHTML = data.room_name;
             const members = document.getElementById('members');
             for (let i = 0; i < data.members.length; i++) {
                 const member = data.members[i];
