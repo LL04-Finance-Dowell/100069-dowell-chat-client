@@ -132,6 +132,10 @@
         .header{
             border-bottom: 2px solid #D9D9D9;
         }
+        #loading{
+            width: 45px;
+            display: none;
+        }
     </style>
 </head>
 
@@ -150,8 +154,13 @@
                             Product Name: <span id="product_name"></span>
                         </h2>
                     </div>
-                   
-                    <button type="submit" class="btn btn-primary btn-end" id="endChat">End Chat </button>
+                    <div class="d-flex">
+                        <button type="submit" class="btn btn-primary btn-end" id="endChat">End Chat </button>
+                        <div id="loading">
+                            <img src="./images/loading.gif" alt="" class="img-fluid loading">
+                        </div>
+                    </div>
+                    
                 </div>
             </div>  
             <div class="row">
@@ -375,9 +384,27 @@ setInterval(get_messages, 3000);
 
 //redirect to home page if click on endChat button and clear local storage
 function endChat(){
-    localStorage.clear();
+    document.querySelector('#loading').style.display = 'block';
+   
     //window.location.href = 'https://100069.pythonanywhere.com/chat/';
-    window.location.href = 'index.html';
+    //ajax call to end chat
+    $.ajax({
+        url:'https://100069.pythonanywhere.com/chat/end-chat/',
+        //url :'http://127.0.0.1:8000/chat/end-chat/
+        type:'POST',
+        data:{
+            'room':localStorage.getItem('room'),
+        },
+        success: function (data) {
+            console.log(data);
+            localStorage.clear();
+            window.location.href = 'index.html';
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    })
+    
 }
 
 const endChatBtn = document.querySelector('#endChat');
